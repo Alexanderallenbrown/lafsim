@@ -301,8 +301,10 @@ function init() {
 
         var integratorTemplate =
         $(go.Node, "Spot", nodeStyle(),
+           {doubleClick: nodeDoubleClick },
            {fromSpot: go.Spot.RightCenter,  // coming out from right side
-         toSpot: go.Spot.LeftCenter },   // going into at left side}
+         toSpot: go.Spot.LeftCenter, 
+          },   // going into at left side}
           $(go.Shape, "Rectangle", shapeStyle()),  // override the default fill (from shapeStyle()) to be white
           $(go.Shape, "Circle", portStyle(true),  // input port
             { portId: "in", alignment: new go.Spot(0, 0.5) }),
@@ -310,8 +312,10 @@ function init() {
             { portId: "out", alignment: new go.Spot(1, 0.5) }),
           $(go.TextBlock, { name: "INT", margin: 4, editable: false, font: '24px FontAwesome'}, "\u222B"),
           $(go.TextBlock, { name: "VAL", margin: 4, editable: true, visible: false }, new go.Binding("text","intval").makeTwoWay(go.Point.stringify)),
+          $(go.TextBlock, { name: "INITVAL", margin: 4, editable: true, visible: false }, new go.Binding("text","initval").makeTwoWay(go.Point.stringify)),
           $(go.TextBlock, { alignment: new go.Spot(0.5, .625, 0, 20), name: "lab", margin: 4, editable: true, font: '10px FontAwesome'}, "integrator"),
         );
+
 
       // add the templates created above to myDiagram and palette
       
@@ -345,6 +349,20 @@ function init() {
       loop();
 }
 
+
+        function nodeDoubleClick(e, obj) {
+        var clicked = obj.part;
+        if (clicked !== null) {
+          var thisemp = clicked.data;
+
+        var newval = window.prompt("Initial Value",obj.findObject("INITVAL").text);
+        obj.findObject("INITVAL").text = newval;
+        obj.findObject("VAL").text = newval;
+        setOutputLinks2(obj,newval);
+        console.log(obj.findObject("VAL").text);
+          
+        }
+      }
 
  // This Binding conversion function creates a Canvas element for a Picture
       // that has a rendering of a line chart drawn by Chart.js.
@@ -426,11 +444,13 @@ function init() {
       var oldskip = myDiagram.skipsUndoManager;
       myDiagram.skipsUndoManager = true;
       // do all "input" nodes first
-      myDiagram.nodes.each(function(node) {
+
+             myDiagram.nodes.each(function(node) {
         if (node.category === "constant") {
           doConstant(node);
         }
       });
+
       // now we can do all other kinds of nodes
       if(running){
             simdata+=t.toFixed(4)+'\t'
@@ -444,12 +464,15 @@ function init() {
                 case "chart": doChart(node);break
               }
             });
-      //do integrator nodes last
+
+             //do integrator nodes last
       myDiagram.nodes.each(function(node) {
         if (node.category === "integrator") {
           doIntegrator(node);
         }
       });
+
+     
       simdata+='\r\n'
       document.getElementById("simdata").value =simdata;
       document.getElementById("simdata").scrollTop = document.getElementById("simdata").scrollHeight
@@ -507,11 +530,12 @@ function init() {
     }
     function resetIntegrator(node){
       node.findObject("VAL").text="0";
-      setOutputLinks2(node,0);
+      setOutputLinks2(node,parseFloat(node.findObject("INITVAL").text));
     }
 
     function resetChart(node){
-      chartdata[node.key]=[{x:0,y:0}];
+      // chartdata[node.key]=[{x:0,y:0}];
+      chartdata[node.key]=[];
       console.log(chartdata)
     }
 
@@ -557,7 +581,12 @@ function init() {
     }
 
     function doIntegrator(node){
-      var currval = parseFloat(node.findObject("VAL").text);
+      if(t==0){
+        var currval = parseFloat(node.findObject("INITVAL").text);
+      }
+      else{
+        var currval = parseFloat(node.findObject("VAL").text);
+      }
       var input = 0;
       node.findLinksInto().each(function(link){ input = getLinkValue2(link)})
       var newval = input*dt+currval;
