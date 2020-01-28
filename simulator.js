@@ -583,6 +583,9 @@ function init() {
     function doIntegrator(node){
       if(t==0){
         var currval = parseFloat(node.findObject("INITVAL").text);
+        if (currval==NaN){
+          currval = 0;
+        }
       }
       else{
         var currval = parseFloat(node.findObject("VAL").text);
@@ -667,4 +670,6 @@ function init() {
 }
     function loadModel() {
       myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
+      // obj.findObject("INITVAL").text = newval;
+        // obj.findObject("VAL").text = newval;
     }
