@@ -530,6 +530,14 @@ function init() {
     }
     function resetIntegrator(node){
       node.findObject("VAL").text="0";
+      var textcurrval = node.findObject("INITVAL").text;
+      // console.log(textcurrval)
+        if(textcurrval == ''){
+          textcurrval = '0.0';
+          node.findObject("INITVAL").text="0.0";
+          // console.log("no initial condition");
+      }
+
       setOutputLinks2(node,parseFloat(node.findObject("INITVAL").text));
     }
 
@@ -582,15 +590,15 @@ function init() {
 
     function doIntegrator(node){
       if(t==0){
-        textcurrval = node.findObject("INITVAL").text;
+        var textcurrval = node.findObject("INITVAL").text;
         console.log(textcurrval)
-        if(textcurrval = ''){
+        if(textcurrval == ''){
           textcurrval = '0.0';
-
+          console.log("no initial condition");
         }
         var currval = parseFloat(textcurrval);
         console.log("currval: ");
-        consol.log(currval)
+        console.log(currval)
         
       }
       else{
