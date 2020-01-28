@@ -582,10 +582,16 @@ function init() {
 
     function doIntegrator(node){
       if(t==0){
-        var currval = parseFloat(node.findObject("INITVAL").text);
-        if (isNaN(currval)){
-          currval = 0;
+        textcurrval = node.findObject("INITVAL").text;
+        console.log(textcurrval)
+        if(textcurrval = ''){
+          textcurrval = '0.0';
+
         }
+        var currval = parseFloat(textcurrval);
+        console.log("currval: ");
+        consol.log(currval)
+        
       }
       else{
         var currval = parseFloat(node.findObject("VAL").text);
