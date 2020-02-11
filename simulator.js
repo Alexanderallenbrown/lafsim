@@ -47,6 +47,12 @@ function resetBlocks(){
                 case "add": resetAdd(node);break;
                 case "integrator": resetIntegrator(node);break;
                 case "chart":resetChart(node);break;
+                case "clock":resetClock(node);break;
+                case "multiply":resetMultiply(node);break;
+                case "divide":resetDivide(node);break;
+                case "sin":resetSin(node);break;
+                case "cos":resetCos(node);break;
+                case "tan":resetTan(node);break;
               }
             });
 }
@@ -150,17 +156,31 @@ function init() {
           fill: "lightgray",
           stroke: "darkslategray",
           desiredSize: new go.Size(40, 40),
-          strokeWidth: 2
+          strokeWidth: 2,
+          portId: ""
         };
       }
+
+      function chartShapeStyle() {
+        return {
+          name: "NODESHAPE",
+          fill: "transparent",
+          stroke: "transparent",
+          desiredSize: new go.Size(200, 160),
+          strokeWidth: 2,
+          portId: ""
+        };
+      }
+
 
       function ellipseStyle() {
         return {
           name: "NODESHAPE",
           fill: "lightgray",
           stroke: "darkslategray",
-          desiredSize: new go.Size(37, 37),
-          strokeWidth: 2
+          desiredSize: new go.Size(44, 44),
+          strokeWidth: 2,
+          portId: ""
         };
       }
 
@@ -180,8 +200,9 @@ function init() {
 
       function chartportStyle(input) {
         return {
-          desiredSize: new go.Size(0, 0),
-          fill: "none",
+          desiredSize: new go.Size(300, 150),
+          fill: "transparent",
+          stroke: "transparent",
           // fromSpot: go.Spot.Right,
           fromLinkable: !input,
           // toSpot: go.Spot.Left,
@@ -207,13 +228,14 @@ function init() {
         $(go.Node, "Spot", nodeStyle(),
           {fromSpot: go.Spot.RightCenter,  // coming out from right side
          toSpot: go.Spot.LeftCenter },   // going into at left side}
+         // $(go.Shape, "Rectangle", chartShapeStyle()),
          $(go.Shape, "Circle", chartportStyle(true),  // input port
             { portId: "in", alignment: new go.Spot(-150, 0.5) , toSpot: new go.Spot(0,.5)}),
           $(go.Panel, "Auto",
             $(go.Shape, { fill: "transparent" },
               new go.Binding("stroke", "color")),
             $(go.Picture,
-              { name: "chart",width: 300, height: 150, portId: "" },
+              { name: "chart", width: 300, height: 150, portId: "" },
               new go.Binding("element", "datasets", makeLineChart))
           ),
           $(go.TextBlock,
@@ -234,8 +256,8 @@ function init() {
 
       var gainTemplate =
         $(go.Node, "Spot", nodeStyle(),
-        {fromSpot: go.Spot.RightCenter,  // coming out from right side
-        toSpot: go.Spot.LeftCenter },   // going into at left side}
+        {fromSpot: new go.Spot(0, 0.5),  // coming out from right side
+        toSpot: new go.Spot(1,.5) },   // going into at left side}
           $(go.Shape, "Rectangle", shapeStyle()),  // override the default fill (from shapeStyle()) to be white
           $(go.Shape, "Circle", portStyle(true),  // input port
             { portId: "in", alignment: new go.Spot(0, 0.5), toSpot: new go.Spot(0,.5) }),
@@ -245,15 +267,54 @@ function init() {
           $(go.TextBlock, { alignment: new go.Spot(0.5, .625, 0, 20), name: "lab", margin: 4, editable: true, font: '10px FontAwesome'}, "Gain (right)"),
         );
 
-        var gain2Template =
+        var sinTemplate =
         $(go.Node, "Spot", nodeStyle(),
-         {toSpot: go.Spot.RightCenter,  // coming out from right side
-          fromSpot: go.Spot.LeftCenter },   // going into at left side}
+        {fromSpot: go.Spot.RightCenter,  // coming out from right side
+        toSpot: go.Spot.LeftCenter },   // going into at left side}
           $(go.Shape, "Rectangle", shapeStyle()),  // override the default fill (from shapeStyle()) to be white
           $(go.Shape, "Circle", portStyle(true),  // input port
-            { portId: "in", alignment: new go.Spot(1, 0.5), toSpot: new go.Spot(0,.5) }),
+            { portId: "in", alignment: new go.Spot(0, 0.5), toSpot: new go.Spot(0,.5) }),
+          $(go.Shape, "TriangleRight", portStyle(false),
+            { portId: "out", alignment: new go.Spot(1, 0.5), fromSpot:  new go.Spot(1, 0.5)}),
+          $(go.TextBlock, { alignment: new go.Spot(0.5, 0, 0, 20), name: "lab", margin: 4, editable: false, font: '12px FontAwesome'}, "sin"),
+          $(go.TextBlock, { alignment: new go.Spot(0.5, .625, 0, 20), name: "lab", margin: 4, editable: true, font: '10px FontAwesome'}, "trig"),
+        );
+
+        var cosTemplate =
+        $(go.Node, "Spot", nodeStyle(),
+        {fromSpot: go.Spot.RightCenter,  // coming out from right side
+        toSpot: go.Spot.LeftCenter },   // going into at left side}
+          $(go.Shape, "Rectangle", shapeStyle()),  // override the default fill (from shapeStyle()) to be white
+          $(go.Shape, "Circle", portStyle(true),  // input port
+            { portId: "in", alignment: new go.Spot(0, 0.5), toSpot: new go.Spot(0,.5) }),
+          $(go.Shape, "TriangleRight", portStyle(false),
+            { portId: "out", alignment: new go.Spot(1, 0.5), fromSpot:  new go.Spot(1, 0.5)}),
+          $(go.TextBlock, { alignment: new go.Spot(0.5, 0, 0, 20), name: "lab", margin: 4, editable: false, font: '12px FontAwesome'}, "cos"),
+          $(go.TextBlock, { alignment: new go.Spot(0.5, .625, 0, 20), name: "lab", margin: 4, editable: true, font: '10px FontAwesome'}, "trig"),
+        );
+
+        var tanTemplate =
+        $(go.Node, "Spot", nodeStyle(),
+        {fromSpot: go.Spot.RightCenter,  // coming out from right side
+        toSpot: go.Spot.LeftCenter },   // going into at left side}
+          $(go.Shape, "Rectangle", shapeStyle()),  // override the default fill (from shapeStyle()) to be white
+          $(go.Shape, "Circle", portStyle(true),  // input port
+            { portId: "in", alignment: new go.Spot(0, 0.5), toSpot: new go.Spot(0,.5) }),
+          $(go.Shape, "TriangleRight", portStyle(false),
+            { portId: "out", alignment: new go.Spot(1, 0.5), fromSpot:  new go.Spot(1, 0.5)}),
+          $(go.TextBlock, { alignment: new go.Spot(0.5, 0, 0, 20), name: "lab", margin: 4, editable: false, font: '12px FontAwesome'}, "tan"),
+          $(go.TextBlock, { alignment: new go.Spot(0.5, .625, 0, 20), name: "lab", margin: 4, editable: true, font: '10px FontAwesome'}, "trig"),
+        );
+
+        var gain2Template =
+        $(go.Node, "Spot", nodeStyle(),
+         {toSpot: new go.Spot(1,.5),  // coming out from right side
+          fromSpot: new go.Spot(0, 0.5) },   // going into at left side}
+          $(go.Shape, "Rectangle", shapeStyle()),  // override the default fill (from shapeStyle()) to be white
+          $(go.Shape, "Circle", portStyle(true),  // input port
+            { portId: "in", alignment: new go.Spot(1, 0.5), toSpot: new go.Spot(1,.5) }),
           $(go.Shape, "TriangleLeft", portStyle(false),
-            { portId: "out", alignment: new go.Spot(0, 0.5), fromSpot:  new go.Spot(1, 0.5)}),
+            { portId: "out", alignment: new go.Spot(0, 0.5), fromSpot:  new go.Spot(0, 0.5)}),
           $(go.TextBlock, { name: "GAIN", margin: 4, editable: true }, new go.Binding("text","gainVal")),
           $(go.TextBlock, { alignment: new go.Spot(0.5, .625, 0, 20), name: "lab", margin: 4, editable: true, font: '10px FontAwesome'}, "Gain (left)"),
         );
@@ -272,8 +333,8 @@ function init() {
 
         var scopeTemplate =
         $(go.Node, "Spot", nodeStyle(),
-           {fromSpot: go.Spot.RightCenter,  // coming out from right side
-         toSpot: go.Spot.LeftCenter },   // going into at left side}
+           {fromSpot: go.Spot.Right,  // coming out from right side
+         toSpot: go.Spot.Left},   // going into at left side}
           $(go.Shape, "Rectangle", shapeStyle()),  // override the default fill (from shapeStyle()) to be white
           $(go.Shape, "Circle", portStyle(true),  // input port
             { portId: "in", alignment: new go.Spot(0, 0.5) , toSpot: new go.Spot(0,.5)}),
@@ -299,6 +360,49 @@ function init() {
           
         );
 
+        var divideTemplate =
+        $(go.Node, "Spot", nodeStyle(),
+          {fromSpot: go.Spot.RightCenter,  // coming out from right side
+          toSpot: go.Spot.NotRightSide },   // going into at left side}
+          $(go.Shape, "Rectangle", shapeStyle()),
+          $(go.Shape, "Circle", portStyle(true),
+            { portId: "in1", alignment: new go.Spot(0, 0.75), toSpot: new go.Spot(0,.75) }),
+          $(go.Shape, "Circle", portStyle(true),
+            { portId: "in2", alignment: new go.Spot(0, .25), toSpot: new go.Spot(0,.25) }),
+          $(go.Shape, "TriangleRight", portStyle(false),
+            { portId: "out", alignment: new go.Spot(1, 0.5), fromSpot: new go.Spot(1,.5) }),
+          $(go.TextBlock, { alignment: new go.Spot(0.5, 0, 0, 20), name: "lab", margin: 4, editable: false, font: '24px FontAwesome'}, "\u00F7"),
+          $(go.TextBlock, { alignment: new go.Spot(0.5, -.625, 0, 20), name: "lab", margin: 4, editable: true, font: '10px FontAwesome'}, "divide"),          
+        );
+
+        var multTemplate =
+        $(go.Node, "Spot", nodeStyle(),
+          {fromSpot: go.Spot.RightCenter,  // coming out from right side
+          toSpot: go.Spot.NotRightSide },   // going into at left side}
+          $(go.Shape, "Rectangle", shapeStyle()),
+          $(go.Shape, "Circle", portStyle(true),
+            { portId: "in1", alignment: new go.Spot(0, 0.75), toSpot: new go.Spot(0,.75) }),
+          $(go.Shape, "Circle", portStyle(true),
+            { portId: "in2", alignment: new go.Spot(0, .25), toSpot: new go.Spot(0,.25) }),
+          $(go.Shape, "TriangleRight", portStyle(false),
+            { portId: "out", alignment: new go.Spot(1, 0.5), fromSpot: new go.Spot(1,.5) }),
+          $(go.TextBlock, { alignment: new go.Spot(0.5, 0, 0, 20), name: "lab", margin: 4, editable: false, font: '24px FontAwesome'}, "X"),
+          $(go.TextBlock, { alignment: new go.Spot(0.5, -.625, 0, 20), name: "lab", margin: 4, editable: true, font: '10px FontAwesome'}, "multiply"),          
+        );
+
+        var clockTemplate =
+        $(go.Node, "Spot", nodeStyle(),
+          {fromSpot: go.Spot.RightCenter,  // coming out from right side
+          toSpot: go.Spot.NotRightSide },   // going into at left side}
+          $(go.Shape, "Ellipse", ellipseStyle()),
+          $(go.Shape, "TriangleRight", portStyle(false),
+            { portId: "out", alignment: new go.Spot(1, 0.5), fromSpot: new go.Spot(1,.5) }),
+          $(go.TextBlock, { alignment: new go.Spot(0.5, 0, 0, 20), name: "lab", margin: 4, editable: false, font: '24px FontAwesome'}, "\uD83D\uDD50"),
+          $(go.TextBlock, { alignment: new go.Spot(0.5, -.625, 0, 20), name: "lab", margin: 4, editable: true, font: '10px FontAwesome'}, "clock"),
+          
+          
+        );
+
         var integratorTemplate =
         $(go.Node, "Spot", nodeStyle(),
            {doubleClick: nodeDoubleClick },
@@ -318,7 +422,12 @@ function init() {
 
 
       // add the templates created above to myDiagram and palette
-      
+      myDiagram.nodeTemplateMap.add("clock",clockTemplate);
+      myDiagram.nodeTemplateMap.add("multiply",multTemplate);
+      myDiagram.nodeTemplateMap.add("divide",divideTemplate);
+      myDiagram.nodeTemplateMap.add("sin",sinTemplate);
+      myDiagram.nodeTemplateMap.add("cos",cosTemplate);
+      myDiagram.nodeTemplateMap.add("tan",tanTemplate);
       myDiagram.nodeTemplateMap.add("constant",constantTemplate);
       myDiagram.nodeTemplateMap.add("gain",gainTemplate);
       myDiagram.nodeTemplateMap.add("gain2",gain2Template);
@@ -334,12 +443,18 @@ function init() {
       palette.nodeTemplateMap = myDiagram.nodeTemplateMap;
 
       palette.model.nodeDataArray = [
+        { category: "clock"},
+        { constVal:"100", category: "constant"},
         { gainVal:"1", category: "gain"},
         { gainVal:"1", category: "gain2"},
-        { constVal:"100", category: "constant"},
-        { scopeVal: "0",category: "scope"},
         { category: "add"},
+        { category: "multiply"},
+        { category: "divide"},
+        { category: "sin"},
+        { category: "cos"},
+        { category: "tan"},
         { intval:"0", category: "integrator"},
+        { scopeVal: "0",category: "scope"},
         {datasets:"", category:"chart"},
         {textContents:"textLabel", category:"label"}
       ];
@@ -443,13 +558,15 @@ function init() {
     function updateStates() {
       var oldskip = myDiagram.skipsUndoManager;
       myDiagram.skipsUndoManager = true;
-      // do all "input" nodes first
+      
 
-             myDiagram.nodes.each(function(node) {
-        if (node.category === "constant") {
-          doConstant(node);
-        }
-      });
+      // do all "input" nodes first
+        myDiagram.nodes.each(function(node) {
+              switch (node.category) {
+                case "constant": doConstant(node);break;
+                case "clock": doClock(node);break;
+              }
+            });
 
       // now we can do all other kinds of nodes
       if(running){
@@ -460,18 +577,27 @@ function init() {
                 case "gain2": doGain(node);break;
                 case "scope": doScope(node); break;
                 case "add": doAdd(node);break;
-                // case "integrator": doIntegrator(node);break;
-                case "chart": doChart(node);break
+                case "multiply": doMultiply(node);break;
+                case "divide": doDivide(node);break;
+                case "sin": doSin(node);break;
+                case "cos": doCos(node);break;
+                case "tan": doTan(node);break;
               }
             });
 
-             //do integrator nodes last
+      //do integrator nodes second to last 
       myDiagram.nodes.each(function(node) {
         if (node.category === "integrator") {
           doIntegrator(node);
         }
       });
 
+      //do all chart nodes actually last
+      myDiagram.nodes.each(function(node) {
+        if (node.category === "chart") {
+          doChart(node);
+        }
+      });
      
       simdata+='\r\n'
       document.getElementById("simdata").value =simdata;
@@ -516,6 +642,24 @@ function init() {
     // determine the color of links coming out of this node based on those coming in and node type
 
     function resetGain(node){
+      setOutputLinks2(node,0);
+    }
+    function resetClock(node){
+      setOutputLinks2(node,0);
+    }
+    function resetMultiply(node){
+      setOutputLinks2(node,0);
+    }
+    function resetDivide(node){
+      setOutputLinks2(node,0);
+    }
+    function resetSin(node){
+      setOutputLinks2(node,0);
+    }
+    function resetCos(node){
+      setOutputLinks2(node,0);
+    }
+    function resetTan(node){
       setOutputLinks2(node,0);
     }
     function resetConstant(node){
@@ -568,6 +712,24 @@ function init() {
       var result = input*gain;
       setOutputLinks2(node,result);
     }
+    function doSin(node){
+      var input = 0;
+      node.findLinksInto().each(function(link){ input = getLinkValue2(link)})
+      var result = Math.sin(input);
+      setOutputLinks2(node,result);
+    }
+    function doCos(node){
+      var input = 0;
+      node.findLinksInto().each(function(link){ input = getLinkValue2(link)})
+      var result = Math.cos(input);
+      setOutputLinks2(node,result);
+    }
+    function doTan(node){
+      var input = 0;
+      node.findLinksInto().each(function(link){ input = getLinkValue2(link)})
+      var result = Math.tan(input);
+      setOutputLinks2(node,result);
+    }
 
     function doConstant(node){
       var myConstant = parseFloat(node.findObject("CONST").text);
@@ -575,9 +737,24 @@ function init() {
       setOutputLinks2(node,myConstant);
     }
 
+    function doClock(node){
+      // console.log("constant value: "+myConstant.toString())
+      setOutputLinks2(node,t);
+    }
+
     function doAdd(node){
       var result = 0;
       node.findLinksInto().each(function(link){ result += getLinkValue2(link)})
+      setOutputLinks2(node,result);
+    }
+    function doMultiply(node){
+      var result = 1;
+      node.findLinksInto().each(function(link){ result *= getLinkValue2(link)})
+      setOutputLinks2(node,result);
+    }
+    function doDivide(node){
+      var result = 1;
+      node.findLinksInto().each(function(link){ result /= getLinkValue2(link)})
       setOutputLinks2(node,result);
     }
 

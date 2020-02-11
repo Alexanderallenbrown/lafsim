@@ -44,9 +44,23 @@
  <div id="right"> <p>Model JSON:  </p>
   <textarea id="mySavedModel" rows="10" cols="100">
 { "class": "GraphLinksModel",
-"linkFromPortIdProperty": "in", 
- "linkToPortIdProperty": "out",
-  "nodeDataArray": [ ]}   
+  "linkFromPortIdProperty": "in",
+  "linkToPortIdProperty": "out",
+  "nodeDataArray": [ 
+{"intval":"0", "category":"integrator", "key":-11, "loc":"-820 -90"},
+{"constVal":"100", "category":"constant", "key":-2, "loc":"-970 -90"},
+{"datasets":"", "category":"chart", "key":-13, "loc":"-730 -260"},
+{"datasets":"", "category":"chart", "key":-4, "loc":"-730 -80"},
+{"scopeVal":"0", "category":"scope", "key":-12, "loc":"-720 90"},
+{"scopeVal":"0", "category":"scope", "key":-6, "loc":"-800 -260"}
+ ],
+  "linkDataArray": [ 
+{"from":-2, "to":-11, "in":"out", "out":"in"},
+{"from":-2, "to":-13, "in":"out", "out":"in"},
+{"from":-11, "to":-4, "in":"out", "out":"in"},
+{"from":-11, "to":-12, "in":"out", "out":"in"},
+{"from":-2, "to":-6, "in":"out", "out":"in"}
+ ]}
     </textarea>
  </div>
   </div> 

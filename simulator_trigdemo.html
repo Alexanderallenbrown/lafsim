@@ -44,9 +44,27 @@
  <div id="right"> <p>Model JSON:  </p>
   <textarea id="mySavedModel" rows="10" cols="100">
 { "class": "GraphLinksModel",
-"linkFromPortIdProperty": "in", 
- "linkToPortIdProperty": "out",
-  "nodeDataArray": [ ]}   
+  "linkFromPortIdProperty": "in",
+  "linkToPortIdProperty": "out",
+  "nodeDataArray": [ 
+{"datasets":"", "category":"chart", "key":-13, "loc":"-690 -230"},
+{"category":"clock", "key":-1, "loc":"-1030 -110"},
+{"gainVal":"1", "category":"gain", "key":-3, "loc":"-950 -90"},
+{"category":"sin", "key":-8, "loc":"-850 -90"},
+{"constVal":"100", "category":"constant", "key":-2, "loc":"-960 30"},
+{"category":"add", "key":-5, "loc":"-870 -40"},
+{"category":"sin", "key":-7, "loc":"-770 -20"},
+{"datasets":"", "category":"chart", "key":-9, "loc":"-700 -50"}
+ ],
+  "linkDataArray": [ 
+{"from":-1, "to":-3, "in":"out", "out":"in"},
+{"from":-3, "to":-8, "in":"out", "out":"in"},
+{"from":-8, "to":-13, "in":"out", "out":"in"},
+{"from":-3, "to":-5, "in":"out", "out":"in1"},
+{"from":-2, "to":-5, "in":"out", "out":"in2"},
+{"from":-5, "to":-7, "in":"out", "out":"in"},
+{"from":-7, "to":-9, "in":"out", "out":"in"}
+ ]} 
     </textarea>
  </div>
   </div> 

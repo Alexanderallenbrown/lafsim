@@ -44,9 +44,27 @@
  <div id="right"> <p>Model JSON:  </p>
   <textarea id="mySavedModel" rows="10" cols="100">
 { "class": "GraphLinksModel",
-"linkFromPortIdProperty": "in", 
- "linkToPortIdProperty": "out",
-  "nodeDataArray": [ ]}   
+  "linkFromPortIdProperty": "in",
+  "linkToPortIdProperty": "out",
+  "nodeDataArray": [ 
+{"datasets":"", "category":"chart", "key":-13, "loc":"-290 -60"},
+{"intval":"0", "category":"integrator", "key":-11, "loc":"-480 -10"},
+{"category":"add", "key":-5, "loc":"-570 -30"},
+{"gainVal":"1", "category":"gain2", "key":-4, "loc":"-420 40"},
+{"constVal":"100", "category":"constant", "key":-2, "loc":"-660 -10"},
+{"scopeVal":"0", "category":"scope", "key":-12, "loc":"-280 -120"},
+{"textContents":"Saved data has a column for time followed by a column for each saveData block in the order they were added to the diagram.", "category":"label", "key":-14, "loc":"-670 120"},
+{"textContents":"Demo Simulation", "category":"label", "key":-8, "loc":"-400 -200"}
+ ],
+  "linkDataArray": [ 
+{"from":-11, "to":-13, "in":"out", "out":"in"},
+{"from":-5, "to":-11, "in":"out", "out":"in"},
+{"from":-11, "to":-4, "in":"out", "out":"in"},
+{"from":-4, "to":-5, "in":"out", "out":"in2"},
+{"from":-2, "to":-5, "in":"out", "out":"in1"},
+{"from":-11, "to":-12, "in":"out", "out":"in"}
+ ]}
+    
     </textarea>
  </div>
   </div> 
