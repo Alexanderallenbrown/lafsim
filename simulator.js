@@ -600,7 +600,7 @@ function init() {
       });
      
       simdata+='\r\n'
-      document.getElementById("simdata").value =simdata;
+      document.getElementById("simdata").value = simdata;
       document.getElementById("simdata").scrollTop = document.getElementById("simdata").scrollHeight
       k+=1;//increment the timestep
       t+=dt;
