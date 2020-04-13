@@ -57,6 +57,17 @@ function resetBlocks(){
             });
 }
 
+function updateBindings(){
+ myDiagram.nodes.each(function(node) {
+              switch (node.category) {
+                case "gain": updateDataGain(node);break;
+                case "gain2": updateDataGain(node);break;
+                case "integrator": updateDataIntegrator(node);break;
+                case "constant": updateDataConstant(node);break;
+              }
+            });
+}
+
 function init() { 
 
       // simtime = parseFloat(document.getElementById("simtime").value);
@@ -705,8 +716,16 @@ function init() {
 
     }
 
+    function updateDataGain(node){
+      var gain = parseFloat(node.findObject("GAIN").text);
+      myDiagram.model.setDataProperty(node.data,"gainVal",gain.toString())
+    }
+
     function doGain(node){
       var gain = parseFloat(node.findObject("GAIN").text);
+      // myDiagram.model.setDataProperty(node.data,"gainVal",gain.toString())
+
+      // console.log(myDiagram.model.toJson())
       var input = 0;
       node.findLinksInto().each(function(link){ input = getLinkValue2(link)})
       var result = input*gain;
@@ -731,8 +750,13 @@ function init() {
       setOutputLinks2(node,result);
     }
 
+    function updateDataConstant(node){
+      var myConstant = parseFloat(node.findObject("CONST").text);
+      myDiagram.model.setDataProperty(node.data,"constVal",myConstant.toString())
+    }
     function doConstant(node){
       var myConstant = parseFloat(node.findObject("CONST").text);
+      // myDiagram.model.setDataProperty(node.data,"constVal",myConstant.toString())
       // console.log("constant value: "+myConstant.toString())
       setOutputLinks2(node,myConstant);
     }
@@ -765,26 +789,37 @@ function init() {
       simdata+=result.toFixed(4)+'\t'
     }
 
+    function updateDataIntegrator(node){
+       var textcurrval = node.findObject("INITVAL").text;
+       if(textcurrval==''){
+        textcurrval = '0.0';
+       }
+        myDiagram.model.setDataProperty(node.data,"initval",textcurrval)
+    }
+
     function doIntegrator(node){
+      var newval;
       if(t==0){
         var textcurrval = node.findObject("INITVAL").text;
-        console.log(textcurrval)
+        // myDiagram.model.setDataProperty(node.data,"initval",textcurrval)
+        // console.log(textcurrval)
         if(textcurrval == ''){
           textcurrval = '0.0';
           console.log("no initial condition");
         }
         var currval = parseFloat(textcurrval);
-        console.log("currval: ");
-        console.log(currval)
-        
+        // console.log("currval: ");
+        // console.log(currval)
+        newval = currval
       }
       else{
         var currval = parseFloat(node.findObject("VAL").text);
-      }
-      var input = 0;
+        var input = 0;
       node.findLinksInto().each(function(link){ input = getLinkValue2(link)})
-      var newval = input*dt+currval;
+      newval = input*dt+currval;
       //console.log(result);
+      }
+      
       node.findObject("VAL").text=newval;
       setOutputLinks2(node,newval);
     }
@@ -826,6 +861,7 @@ function init() {
 
     // save a model to and load a model from JSON text, displayed below the Diagram
     function saveModel() {
+      updateBindings();
       // myModel.updateBindings();
       document.getElementById("mySavedModel").value = myDiagram.model.toJson();
       var blob;
