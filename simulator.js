@@ -792,7 +792,7 @@ function init() {
       }
       // node.findLinksInto().each(function(link){ result /= getLinkValue2(link)})
       console.log(mylinks)
-      result = 1.0*mylinks[0]/mylinks[1];
+      result = 1.0*mylinks[1]/mylinks[0];
       setOutputLinks2(node,result);
     }
 
