@@ -728,7 +728,7 @@ function init() {
       // console.log(myDiagram.model.toJson())
       var input = 0;
       node.findLinksInto().each(function(link){ input = getLinkValue2(link)})
-      var result = input*gain;
+      var result = 1.0*input*gain;
       setOutputLinks2(node,result);
     }
     function doSin(node){
@@ -773,12 +773,26 @@ function init() {
     }
     function doMultiply(node){
       var result = 1;
-      node.findLinksInto().each(function(link){ result *= getLinkValue2(link)})
+      var mylinks = [];
+      connections = node.findLinksInto()
+      while(connections.next()){
+        mylinks.push(getLinkValue2(connections.value))
+      }
+      // node.findLinksInto().each(function(link){ result /= getLinkValue2(link)})
+      console.log(mylinks)
+      result = 1.0*mylinks[0]*mylinks[1];
       setOutputLinks2(node,result);
     }
     function doDivide(node){
       var result = 1;
-      node.findLinksInto().each(function(link){ result /= getLinkValue2(link)})
+      var mylinks = [];
+      connections = node.findLinksInto()
+      while(connections.next()){
+        mylinks.push(getLinkValue2(connections.value))
+      }
+      // node.findLinksInto().each(function(link){ result /= getLinkValue2(link)})
+      console.log(mylinks)
+      result = 1.0*mylinks[0]/mylinks[1];
       setOutputLinks2(node,result);
     }
 
