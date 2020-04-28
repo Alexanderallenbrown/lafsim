@@ -779,20 +779,24 @@ function init() {
         mylinks.push(getLinkValue2(connections.value))
       }
       // node.findLinksInto().each(function(link){ result /= getLinkValue2(link)})
-      console.log(mylinks)
+      // console.log(mylinks)
       result = 1.0*mylinks[0]*mylinks[1];
       setOutputLinks2(node,result);
     }
     function doDivide(node){
       var result = 1;
-      var mylinks = [];
-      connections = node.findLinksInto()
-      while(connections.next()){
-        mylinks.push(getLinkValue2(connections.value))
-      }
+      // var mylinks = [];
+      // connectionsa = node.findLinksInto("in1")
+      // while(connectionsa.next()){
+      //   mylinks.push(getLinkValue2(connections.value))
+      // }
       // node.findLinksInto().each(function(link){ result /= getLinkValue2(link)})
-      console.log(mylinks)
-      result = 1.0*mylinks[1]/mylinks[0];
+      var val_a;
+      var val_b;
+      node.findLinksInto("in2").each(function(link){ val_a = getLinkValue2(link)})
+      node.findLinksInto("in1").each(function(link){ val_b = getLinkValue2(link)})
+      console.log(val_a,val_b)
+      result = 1.0*val_a/val_b;
       setOutputLinks2(node,result);
     }
 
