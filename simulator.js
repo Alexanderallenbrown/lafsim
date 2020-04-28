@@ -641,6 +641,13 @@ function init() {
       return parseFloat(link.findObject("VAL").text)
     }
 
+    function getLinkValue3(link){
+      var myval;
+      stringval = (link.findObject("VAL").text)
+      myval = eval(stringval)
+      console.log(stringval)
+      return myval
+    }
 
 
 
@@ -693,7 +700,7 @@ function init() {
           // console.log("no initial condition");
       }
 
-      setOutputLinks2(node,parseFloat(node.findObject("INITVAL").text));
+      setOutputLinks2(node,eval(node.findObject("INITVAL").text));
     }
 
     function resetChart(node){
@@ -717,12 +724,12 @@ function init() {
     }
 
     function updateDataGain(node){
-      var gain = parseFloat(node.findObject("GAIN").text);
+      var gain = eval(node.findObject("GAIN").text);
       myDiagram.model.setDataProperty(node.data,"gainVal",gain.toString())
     }
 
     function doGain(node){
-      var gain = parseFloat(node.findObject("GAIN").text);
+      var gain = eval(node.findObject("GAIN").text);
       // myDiagram.model.setDataProperty(node.data,"gainVal",gain.toString())
 
       // console.log(myDiagram.model.toJson())
@@ -751,11 +758,11 @@ function init() {
     }
 
     function updateDataConstant(node){
-      var myConstant = parseFloat(node.findObject("CONST").text);
+      var myConstant = eval(node.findObject("CONST").text);
       myDiagram.model.setDataProperty(node.data,"constVal",myConstant.toString())
     }
     function doConstant(node){
-      var myConstant = parseFloat(node.findObject("CONST").text);
+      var myConstant = eval(node.findObject("CONST").text);
       // myDiagram.model.setDataProperty(node.data,"constVal",myConstant.toString())
       // console.log("constant value: "+myConstant.toString())
       setOutputLinks2(node,myConstant);
@@ -795,7 +802,7 @@ function init() {
       var val_b;
       node.findLinksInto("in2").each(function(link){ val_a = getLinkValue2(link)})
       node.findLinksInto("in1").each(function(link){ val_b = getLinkValue2(link)})
-      console.log(val_a,val_b)
+      //console.log(val_a,val_b)
       result = 1.0*val_a/val_b;
       setOutputLinks2(node,result);
     }
@@ -825,13 +832,13 @@ function init() {
           textcurrval = '0.0';
           console.log("no initial condition");
         }
-        var currval = parseFloat(textcurrval);
+        var currval = eval(textcurrval);
         // console.log("currval: ");
         // console.log(currval)
         newval = currval
       }
       else{
-        var currval = parseFloat(node.findObject("VAL").text);
+        var currval = eval(node.findObject("VAL").text);
         var input = 0;
       node.findLinksInto().each(function(link){ input = getLinkValue2(link)})
       newval = input*dt+currval;
