@@ -616,16 +616,17 @@ function init() {
       k+=1;//increment the timestep
       t+=dt;
       //check to see if we are done
-      if (k>maxk){
+      if ((k>maxk)||done){
         running=false; 
         done = true;
         console.log("DONE");
+        
       };
       
       myDiagram.skipsUndoManager = oldskip;
     }
     else{
-      if(done){
+      if(1){
       done=false;
       myDiagram.nodes.each(function(node) {
               if (node.category=="chart") {
@@ -644,9 +645,31 @@ function init() {
     function getLinkValue3(link){
       var myval;
       stringval = (link.findObject("VAL").text)
-      myval = eval(stringval)
-      console.log(stringval)
-      return myval
+      try{
+        myval = eval(stringval)
+      }
+      catch(err){
+        myval = 0.0
+        alert("ERROR!  "+err)
+      }
+      finally{
+        return myval
+      }
+      
+    }
+
+    function myEval(stringval){
+      try{
+        myval = eval(stringval)
+      }
+      catch(err){
+        myval = 0.0
+        alert("ERROR!  "+err);
+        done = true;
+      }
+      finally{
+        return myval
+      }
     }
 
 
@@ -700,7 +723,7 @@ function init() {
           // console.log("no initial condition");
       }
 
-      setOutputLinks2(node,eval(node.findObject("INITVAL").text));
+      setOutputLinks2(node,myEval(node.findObject("INITVAL").text));
     }
 
     function resetChart(node){
@@ -724,12 +747,12 @@ function init() {
     }
 
     function updateDataGain(node){
-      var gain = eval(node.findObject("GAIN").text);
+      var gain = myEval(node.findObject("GAIN").text);
       myDiagram.model.setDataProperty(node.data,"gainVal",gain.toString())
     }
 
     function doGain(node){
-      var gain = eval(node.findObject("GAIN").text);
+      var gain = myEval(node.findObject("GAIN").text);
       // myDiagram.model.setDataProperty(node.data,"gainVal",gain.toString())
 
       // console.log(myDiagram.model.toJson())
@@ -758,11 +781,11 @@ function init() {
     }
 
     function updateDataConstant(node){
-      var myConstant = eval(node.findObject("CONST").text);
+      var myConstant = myEval(node.findObject("CONST").text);
       myDiagram.model.setDataProperty(node.data,"constVal",myConstant.toString())
     }
     function doConstant(node){
-      var myConstant = eval(node.findObject("CONST").text);
+      var myConstant = myEval(node.findObject("CONST").text);
       // myDiagram.model.setDataProperty(node.data,"constVal",myConstant.toString())
       // console.log("constant value: "+myConstant.toString())
       setOutputLinks2(node,myConstant);
@@ -832,13 +855,13 @@ function init() {
           textcurrval = '0.0';
           console.log("no initial condition");
         }
-        var currval = eval(textcurrval);
+        var currval = myEval(textcurrval);
         // console.log("currval: ");
         // console.log(currval)
         newval = currval
       }
       else{
-        var currval = eval(node.findObject("VAL").text);
+        var currval = myEval(node.findObject("VAL").text);
         var input = 0;
       node.findLinksInto().each(function(link){ input = getLinkValue2(link)})
       newval = input*dt+currval;
