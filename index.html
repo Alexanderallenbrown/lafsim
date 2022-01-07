@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Block Diagram Simulator</title>
+  <style type="text/css">
+* {margin: 0; padding: 0;}
+#container {height: 100%; width:100%; font-size: 0;}
+#left, #right {display: inline-block; *display: inline; zoom: 1; vertical-align: top; font-size: 12px;}
+#left {width: 45%}
+#right {width: 45%}
+</style>
+  <meta name="description" content="A simple block diagram simulator." />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://unpkg.com/gojs/release/go.js"></script>
+  <script src="https://unpkg.com/browse/gojs@2.1.5/extensions/Figures.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  <script src="simulator.js"></script>
+
+</head>
+<body onload="init()">
+<div id="sample">
+  <div style="width: 100%; display: flex; justify-content: space-between">
+    <div id="palette" style="width: 100px; height: 450px; margin-right: 2px; background-color: whitesmoke; border: solid 1px black"></div>
+    <div id="myDiagramDiv" style="flex-grow: 1; height: 450px; border: solid 1px black"></div>
+  </div>
+    <div id="myCanvases" style="position:absolute; top:0px; left:0px; width:0px; height:0px; opacity:0"></div>
+
+  <div>
+      <button id="loadModel" onclick="loadModel()">Load JSON Model</button>
+      <button id="saveModel" onclick="saveModel()">Save Model</button>
+      <button id="RunButton" onclick="runCallback()">Run Simulation</button>
+      <button id="saveData" onclick="saveData()">Save Data</button>
+      Simulation Timestep: <input type="text" id="timestep" value="0.01">
+      Duration: <input type="text" id="simtime" value="1.0">
+    </div>
+    <div id="container">
+    <div id="left">
+   <p> Output Data:</p>
+    <textarea rows="10" cols="100" id="simdata">
+ time out1 out2 out3
+ </textarea>
+ </div>
+ <div id="right"> <p>Model JSON:  </p>
+  <textarea id="mySavedModel" rows="10" cols="75">
+{ "class": "GraphLinksModel",
+"linkFromPortIdProperty": "in", 
+ "linkToPortIdProperty": "out",
+  "nodeDataArray": [ ]}   
+    </textarea>
+ </div>
+  </div> 
+</div>
+</body>
+</html>
